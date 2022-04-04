@@ -40,17 +40,18 @@ public class UserController {
         return ResponseEntity.ok(userByUsername.get());
     }
 
-//    @PutMapping("/{username}")
-//    public ResponseEntity<User> updateUserByUsername(@PathVariable("username") String username) {
-//        if (username == null | userRepository.getUserByUsername(username).isEmpty()) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//
-//        Optional<User> userByUsername = userRepository.getUserByUsername(username);
-//        User updateUser = userByUsername.get();
-//
-//
-//    }
+    @PutMapping("/{username}")
+    public ResponseEntity<User> updateUserByUsername(@PathVariable("username") String username) {
+        if (username == null | userRepository.getUserByUsername(username).isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        Optional<User> userByUsername = userRepository.getUserByUsername(username);
+        User updateUser = userByUsername.get();
+        updateUser.setUsername(username);
+
+        return ResponseEntity.ok(userRepository.save(updateUser));
+
+    }
 
     @ApiOperation(value = "Delete user")
     @DeleteMapping("/{username}")
