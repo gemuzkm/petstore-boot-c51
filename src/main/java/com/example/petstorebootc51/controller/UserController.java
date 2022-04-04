@@ -2,6 +2,7 @@ package com.example.petstorebootc51.controller;
 
 import com.example.petstorebootc51.entity.User;
 import com.example.petstorebootc51.repository.UserRepository;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
