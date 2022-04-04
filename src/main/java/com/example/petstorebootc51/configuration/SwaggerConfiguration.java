@@ -11,7 +11,7 @@ public class SwaggerConfiguration {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.example.restbootc51.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.example.petstorebootc51.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
