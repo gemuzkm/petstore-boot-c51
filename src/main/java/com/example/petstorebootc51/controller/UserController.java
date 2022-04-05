@@ -3,14 +3,13 @@ package com.example.petstorebootc51.controller;
 import com.example.petstorebootc51.entity.User;
 import com.example.petstorebootc51.repository.UserRepository;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,14 +23,14 @@ public class UserController {
 
     @ApiOperation(value = "Create user", notes = "This can only be done by the logged in user.")
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody User user, BindingResult bindingResult) {
+    public void save(@RequestBody @ApiParam(value = "Created user object") User user) {
         userRepository.save(user);
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Get user by user name")
     @GetMapping("/{username}")
-    public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username) {
+    public ResponseEntity<User> getUserByUsername(@PathVariable("username")
+                                                  @ApiParam(value = "The name that needs to be fetched. Use user1 for testing.", example = "username") String username) {
         if (username == null | userRepository.getUserByUsername(username).isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
@@ -40,22 +39,27 @@ public class UserController {
         return ResponseEntity.ok(userByUsername.get());
     }
 
+    @ApiOperation(value = "Update user", notes = "This can only be done by the logged in user.")
     @PutMapping("/{username}")
-    public ResponseEntity<User> updateUserByUsername(@PathVariable("username") String username) {
+    public ResponseEntity<User> updateUserByUsername(@PathVariable("username")
+                                                     @ApiParam(value = "name that need to be updated", example = "username") String username,
+                                                     @RequestBody @ApiParam(value = "Updated user object") User user) {
         if (username == null | userRepository.getUserByUsername(username).isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
         Optional<User> userByUsername = userRepository.getUserByUsername(username);
-        User updateUser = userByUsername.get();
-        updateUser.setUsername(username);
+        User updateUser = new User();
+        if (userByUsername.isPresent()) {
+            updateUser = userRepository.save(user);
+        }
 
         return ResponseEntity.ok(userRepository.save(updateUser));
 
     }
 
-    @ApiOperation(value = "Delete user")
+    @ApiOperation(value = "Delete user", notes = "This can only be done by the logged in user.")
     @DeleteMapping("/{username}")
-    public void deleteUserByUsername(@PathVariable("username") String username) {
+    public void deleteUserByUsername(@PathVariable("username") @ApiParam(value = "The name that needs to be deleted", example = "username") String username) {
         if (username == null | userRepository.getUserByUsername(username).isEmpty()) {
 
         }
@@ -66,7 +70,9 @@ public class UserController {
 
     @ApiOperation(value = "Logs user into the system")
     @GetMapping("/login")
-    public String login(String username, String password, BindingResult bindingResult) {
+    public String login(@ApiParam(value = "The user name for login", example = "username", required = true) String username ,
+                        @ApiParam(value = "TThe password for login in clear text", example = "password", required = true) String password,
+                        BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "denied";
         }
@@ -78,5 +84,26 @@ public class UserController {
         } else {
             return "denied";
         }
+    }
+
+    @GetMapping("/logout")
+    public void logout() {
+
+    }
+
+    @ApiOperation(value = "Creates list of users with given input array")
+    @PostMapping("/createWithArray")
+    public void createWithArray(@RequestBody @ApiParam(value = "List of user object") User[] users) {
+        List<User> userList = new ArrayList<>();
+
+        for (int i = 0; i < users.length; i++) {
+            userList.add(userRepository.save(users[i]));
+        }
+    }
+
+    @ApiOperation(value = "Creates list of users with given input array")
+    @PostMapping("/createWithList")
+    public void createWithList(@RequestBody @ApiParam(value = "List of user object") List<User> userList) {
+        userRepository.saveAll(userList);
     }
 }
