@@ -4,6 +4,7 @@ import com.example.petstorebootc51.entity.Order;
 import com.example.petstorebootc51.entity.Pet;
 import com.example.petstorebootc51.repository.OrderRepository;
 import com.example.petstorebootc51.repository.PetRepository;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/store")
+@Api(tags = "store")
 public class StoreController {
     @Autowired
     private OrderRepository orderRepository;

@@ -3,6 +3,7 @@ package com.example.petstorebootc51.controller;
 import com.example.petstorebootc51.entity.Pet;
 import com.example.petstorebootc51.enums.PetStatus;
 import com.example.petstorebootc51.repository.PetRepository;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pet")
+@Api(tags = "pet")
 public class PetController {
     private final PetRepository petRepository;
 

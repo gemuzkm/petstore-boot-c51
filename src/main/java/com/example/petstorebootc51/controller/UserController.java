@@ -2,6 +2,7 @@ package com.example.petstorebootc51.controller;
 
 import com.example.petstorebootc51.entity.User;
 import com.example.petstorebootc51.repository.UserRepository;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
+@Api(tags = "user")
 public class UserController {
     private final UserRepository userRepository;
 
