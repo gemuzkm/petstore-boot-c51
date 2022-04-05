@@ -65,12 +65,12 @@ public class UserController {
         }
 
         Optional<User> userByUsername = userRepository.getUserByUsername(username);
-        userByUsername.ifPresent(user -> userRepository.delete(user));
+        userByUsername.ifPresent(userRepository::delete);
     }
 
     @ApiOperation(value = "Logs user into the system")
     @GetMapping("/login")
-    public String login(@ApiParam(value = "The user name for login", example = "username", required = true) String username ,
+    public String login(@ApiParam(value = "The user name for login", example = "username", required = true) String username,
                         @ApiParam(value = "TThe password for login in clear text", example = "password", required = true) String password,
                         BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
