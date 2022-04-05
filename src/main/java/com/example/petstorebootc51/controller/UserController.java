@@ -43,7 +43,7 @@ public class UserController {
     @PutMapping("/{username}")
     public ResponseEntity<User> updateUserByUsername(@PathVariable("username")
                                                      @ApiParam(value = "name that need to be updated", example = "username") String username,
-                                                     @RequestBody @ApiParam(value = "Updated user object") User user) {
+                                                     @ApiParam(value = "Updated user object") @RequestBody User user) {
         if (username == null | userRepository.getUserByUsername(username).isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
