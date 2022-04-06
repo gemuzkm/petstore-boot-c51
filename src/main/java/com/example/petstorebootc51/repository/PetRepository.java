@@ -13,5 +13,5 @@ import java.util.Optional;
 @Component
 @Repository
 public interface PetRepository extends JpaRepository<Pet, Long> {
-    List<Pet> findByStatus(PetStatus status);
+    List<Pet> findAllByStatus(PetStatus status);
 }
