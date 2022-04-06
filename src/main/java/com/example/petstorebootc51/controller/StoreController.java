@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/store")
-@Api(tags = "store")
+@Api(tags = "store", description = "Access to Petstore orders")
 public class StoreController {
     @Autowired
     private OrderRepository orderRepository;

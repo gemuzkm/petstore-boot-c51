@@ -2,11 +2,11 @@ package com.example.petstorebootc51.controller;
 
 import com.example.petstorebootc51.entity.User;
 import com.example.petstorebootc51.repository.UserRepository;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
-@Api(tags = "user")
+@Api(tags = "user", description = "Operations about user")
 public class UserController {
     private final UserRepository userRepository;
 
@@ -68,29 +68,6 @@ public class UserController {
 
         Optional<User> userByUsername = userRepository.getUserByUsername(username);
         userByUsername.ifPresent(userRepository::delete);
-    }
-
-    @ApiOperation(value = "Logs user into the system")
-    @GetMapping("/login")
-    public String login(@ApiParam(value = "The user name for login", example = "username", required = true) String username,
-                        @ApiParam(value = "TThe password for login in clear text", example = "password", required = true) String password,
-                        BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "denied";
-        }
-
-        if (userRepository.getUserByUsername(username).isEmpty()) {
-            return "denied";
-        } else if (userRepository.getUserByUsername(username).get().getPassword().equals(password)) {
-            return "success";
-        } else {
-            return "denied";
-        }
-    }
-
-    @GetMapping("/logout")
-    public void logout() {
-
     }
 
     @ApiOperation(value = "Creates list of users with given input array")
