@@ -13,14 +13,26 @@ import java.util.Collections;
 
 @Configuration
 public class SwaggerConfiguration {
+//    @Bean
+//    public Docket api() {
+//        return new Docket(DocumentationType.SWAGGER_2)
+//                .select()
+//                .apis(RequestHandlerSelectors.basePackage("com.example.petstorebootc51.controller"))
+//                .paths(PathSelectors.any())
+//                .build()
+//                .apiInfo(apiInfo());
+//    }
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .useDefaultResponseMessages(false)
+//                .operationOrdering(Comparator.comparing(Operation::getMethod))
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.example.petstorebootc51.controller"))
                 .paths(PathSelectors.any())
-                .build()
-                .apiInfo(apiInfo());
+                .build();
     }
 
     private ApiInfo apiInfo() {
