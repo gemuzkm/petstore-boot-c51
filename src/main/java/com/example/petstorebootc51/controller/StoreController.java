@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/store")
 @Api(tags = "store", description = "Access to Petstore orders")
 public class StoreController {
-    @Autowired
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
+
+    public StoreController(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
 
     @ApiOperation(value = "Place an order for a pet")
     @PostMapping("/order")
