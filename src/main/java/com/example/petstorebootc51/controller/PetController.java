@@ -38,9 +38,9 @@ public class PetController {
     @ApiOperation(value = "Updates a pet in the store with from data")
     @PostMapping("/{petId}")
     public void updateById(@PathVariable("petId")
-                                           @ApiParam(value = "ID of pet that needs to be updated", example = "petId") long petId,
-                                           @ApiParam(value = "Updated name of the pet", example = "name") String name,
-                                           @ApiParam(value = "Updated status of the pet", example = "status") String status) {
+                           @ApiParam(value = "ID of pet that needs to be updated", example = "petId") long petId,
+                           @ApiParam(value = "Updated name of the pet", example = "name") String name,
+                           @ApiParam(value = "Updated status of the pet", example = "status") String status) {
 
         Pet petUpdate = petRepository.getById(petId);
         petUpdate.setName(name);
@@ -51,8 +51,8 @@ public class PetController {
     @ApiOperation(value = "Delete a pet")
     @DeleteMapping("/{petId}")
     public void delete(@PathVariable("petId")
-                                 @ApiParam(value = "Pet id to delete", example = "petId") long petId,
-                             @RequestHeader("api_ley") @ApiParam(value = " ", example = "api_key") String api_key) {
+                       @ApiParam(value = "Pet id to delete", example = "petId") long petId,
+                       @RequestHeader("api_ley") @ApiParam(value = " ", example = "api_key") String api_key) {
     }
 
     @ApiOperation(value = "Add a new pet the store")
