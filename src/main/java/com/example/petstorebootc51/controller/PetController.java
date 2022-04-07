@@ -25,32 +25,34 @@ public class PetController {
         this.petRepository = petRepository;
     }
 
+    @ApiOperation(value = "Find pet by ID", notes = "Returns a single pet")
     @GetMapping("/{petId}")
-    public ResponseEntity<Pet> findPetById(@PathVariable("petId") long petId, BindingResult bindingResult) {
+    public ResponseEntity<Pet> findPetById(@PathVariable("petId")
+                                           @ApiParam(value = "ID of pet to return", example = "petId") long petId,
+                                           BindingResult bindingResult) {
         Pet byId = petRepository.getById(petId);
 
         return ResponseEntity.ok(byId);
     }
 
+    @ApiOperation(value = "Updates a pet in the store with from data")
     @PostMapping("/{petId}")
-    public ResponseEntity<Void> updateById(@PathVariable("petId") long petId, String name, String status) {
+    public void updateById(@PathVariable("petId")
+                                           @ApiParam(value = "ID of pet that needs to be updated", example = "petId") long petId,
+                                           @ApiParam(value = "Updated name of the pet", example = "name") String name,
+                                           @ApiParam(value = "Updated status of the pet", example = "status") String status) {
 
         Pet petUpdate = petRepository.getById(petId);
         petUpdate.setName(name);
         petUpdate.setStatus(PetStatus.valueOf(status));
         petRepository.save(petUpdate);
-        return new ResponseEntity<>(HttpStatus.UPGRADE_REQUIRED);
     }
 
+    @ApiOperation(value = "Delete a pet")
     @DeleteMapping("/{petId}")
-    public HttpStatus delete(@PathVariable("petId") long petId, @RequestHeader("api_ley") String api_ley) {
-        if (petRepository.existsById(petId)) {
-
-        } else {
-            return HttpStatus.resolve(404);
-        }
-
-        return null;
+    public void delete(@PathVariable("petId")
+                                 @ApiParam(value = "Pet id to delete", example = "petId") long petId,
+                             @RequestHeader("api_ley") @ApiParam(value = " ", example = "api_key") String api_key) {
     }
 
     @ApiOperation(value = "Add a new pet the store")
@@ -64,8 +66,8 @@ public class PetController {
     @ApiOperation(value = "Update an existing pet")
     @PutMapping
     public void update(@RequestBody
-                             @ApiParam(value = "Pet object that needs to be added to the store")  Pet pet,
-                             BindingResult bindingResult) {
+                       @ApiParam(value = "Pet object that needs to be added to the store") Pet pet,
+                       BindingResult bindingResult) {
         petRepository.save(pet);
     }
 
@@ -74,7 +76,7 @@ public class PetController {
     public ResponseEntity<List<Pet>> findByStatus(@RequestBody
                                                   @ApiParam(value = "Status values that need to be considered for filter\n " +
                                                           "Available values : available, pending, sold")
-                                                  PetStatus[] status) {
+                                                          PetStatus[] status) {
         List<Pet> byStatus = new ArrayList<>();
 
         for (int i = 0; i < status.length; i++) {
