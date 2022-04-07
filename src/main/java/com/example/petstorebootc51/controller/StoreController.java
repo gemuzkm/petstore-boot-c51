@@ -1,15 +1,12 @@
 package com.example.petstorebootc51.controller;
 
 import com.example.petstorebootc51.entity.Order;
-import com.example.petstorebootc51.entity.Pet;
 import com.example.petstorebootc51.repository.OrderRepository;
-import com.example.petstorebootc51.repository.PetRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +40,8 @@ public class StoreController {
             @ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
             @ApiResponse(responseCode = "404", description = "Order not found")
     })
-    @GetMapping(value = "/order/{orderId}", produces = "application/json")
+//    @GetMapping(value = "/order/{orderId}", produces = "application/json")
+    @GetMapping("/order/{orderId}")
     public ResponseEntity<Order> getOrder(@PathVariable("orderId")
                                           @ApiParam(value = "ID of pet that needs to be fetched", example = "orderId") Long orderId,
                                           BindingResult bindingResult) {
@@ -57,14 +55,15 @@ public class StoreController {
             @ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
             @ApiResponse(responseCode = "404", description = "Order not found")
     })
-    @DeleteMapping(value = "/order/{orderId}", produces = "application/json")
+//    @DeleteMapping(value = "/order/{orderId}", produces = "application/json")
+    @DeleteMapping("/order/{orderId}")
     public void deleteOrder(@PathVariable("orderId")
                             @ApiParam(value = "ID of the order that needs to be deleted", example = "orderId") Long orderId,
                             BindingResult bindingResult) {
 
     }
 
-    @ApiOperation(value = "Returms pet inventories by status", notes = "Returns a map of status codes to quantities")
+    @ApiOperation(value = "Returns pet inventories by status", notes = "Returns a map of status codes to quantities")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation")
     })
@@ -72,5 +71,4 @@ public class StoreController {
     public ResponseEntity<Object> getListInventory() {
         return ResponseEntity.ok(new Object());
     }
-
 }

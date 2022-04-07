@@ -103,7 +103,6 @@ public class PetController {
                                                           "Available values : available, pending, sold")
                                                           PetStatus[] status) {
         List<Pet> byStatus = new ArrayList<>();
-
         for (int i = 0; i < status.length; i++) {
             byStatus.addAll(petRepository.findAllByStatus(status[i]));
         }

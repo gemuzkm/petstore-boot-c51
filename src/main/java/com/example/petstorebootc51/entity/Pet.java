@@ -23,7 +23,7 @@ public class Pet {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany
     @JoinColumn(name = "tag_id")
     private List<Tag> tags;
     private String name;
