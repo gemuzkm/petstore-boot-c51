@@ -78,7 +78,7 @@ public class PetController {
         List<Pet> byStatus = new ArrayList<>();
 
         for (int i = 0; i < status.length; i++) {
-            byStatus = petRepository.findAllByStatus(status[i]);
+            byStatus.addAll(petRepository.findAllByStatus(status[i]));
         }
 
         return ResponseEntity.ok(byStatus);
