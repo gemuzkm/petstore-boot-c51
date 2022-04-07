@@ -6,7 +6,8 @@ import com.example.petstorebootc51.repository.PetRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.http.HttpStatus;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,12 @@ public class PetController {
     }
 
     @ApiOperation(value = "Find pet by ID", notes = "Returns a single pet")
-    @GetMapping("/{petId}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
+            @ApiResponse(responseCode = "404", description = "Pet not found")
+    })
+    @GetMapping(value = "/{petId}", produces = "application/json")
     public ResponseEntity<Pet> findPetById(@PathVariable("petId")
                                            @ApiParam(value = "ID of pet to return", example = "petId") long petId,
                                            BindingResult bindingResult) {
@@ -36,7 +42,10 @@ public class PetController {
     }
 
     @ApiOperation(value = "Updates a pet in the store with from data")
-    @PostMapping("/{petId}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "405", description = "Invalid input")
+    })
+    @PostMapping(value = "/{petId}", produces = "application/json")
     public void updateById(@PathVariable("petId")
                            @ApiParam(value = "ID of pet that needs to be updated", example = "petId") long petId,
                            @ApiParam(value = "Updated name of the pet", example = "name") String name,
@@ -48,15 +57,22 @@ public class PetController {
         petRepository.save(petUpdate);
     }
 
-    @ApiOperation(value = "Delete a pet")
-    @DeleteMapping("/{petId}")
+    @ApiOperation(value = "Delete a pet", produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
+            @ApiResponse(responseCode = "404", description = "Pet not found")
+    })
+    @DeleteMapping(value = "/{petId}", produces = "application/json")
     public void delete(@PathVariable("petId")
                        @ApiParam(value = "Pet id to delete", example = "petId") long petId,
                        @RequestHeader("api_ley") @ApiParam(value = " ", example = "api_key") String api_key) {
     }
 
-    @ApiOperation(value = "Add a new pet the store")
-    @PostMapping
+    @ApiOperation(value = "Add a new pet the store", produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "405", description = "Invalid input")
+    })
+    @PostMapping(produces = "application/json")
     public void save(@Valid @RequestBody
                      @ApiParam(value = "Pet object that needs to be added to the store") Pet pet,
                      BindingResult bindingResult) {
@@ -64,7 +80,12 @@ public class PetController {
     }
 
     @ApiOperation(value = "Update an existing pet")
-    @PutMapping
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
+            @ApiResponse(responseCode = "404", description = "Pet not found"),
+            @ApiResponse(responseCode = "405", description = "Invalid input")
+    })
+    @PutMapping(produces = "application/json")
     public void update(@RequestBody
                        @ApiParam(value = "Pet object that needs to be added to the store") Pet pet,
                        BindingResult bindingResult) {
@@ -72,7 +93,11 @@ public class PetController {
     }
 
     @ApiOperation(value = "Find Pets by Status", notes = "Multiple status values can be provided with comma separated strings")
-    @GetMapping("/findByStatus")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "Invalid status value")
+    })
+    @GetMapping(value = "/findByStatus", produces = "application/json")
     public ResponseEntity<List<Pet>> findByStatus(@RequestBody
                                                   @ApiParam(value = "Status values that need to be considered for filter\n " +
                                                           "Available values : available, pending, sold")
