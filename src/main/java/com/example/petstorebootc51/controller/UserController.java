@@ -1,6 +1,7 @@
 package com.example.petstorebootc51.controller;
 
 import com.example.petstorebootc51.entity.User;
+import com.example.petstorebootc51.error.UserIsExitsException;
 import com.example.petstorebootc51.repository.UserRepository;
 
 import io.swagger.annotations.Api;
@@ -8,10 +9,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,9 +32,12 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "successful operation")
     })
     @PostMapping(produces = "application/json")
-    public void save(@RequestBody @ApiParam(value = "Created user object") User user) {
-        userRepository.save(user);
-
+    public void save(@Valid @RequestBody @ApiParam(value = "Created user object") User user) {
+       if (userRepository.getUserByUsername(user.getUsername()).isPresent()) {
+            throw new UserIsExitsException("user is exits");
+       } else {
+           userRepository.save(user);
+       }
     }
 
     @ApiOperation(value = "Get user by user name")
