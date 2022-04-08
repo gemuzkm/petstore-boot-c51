@@ -2,6 +2,7 @@ package com.example.petstorebootc51.controller;
 
 import com.example.petstorebootc51.entity.User;
 import com.example.petstorebootc51.error.UserIsExitsException;
+import com.example.petstorebootc51.error.ValidationException;
 import com.example.petstorebootc51.repository.UserRepository;
 
 import io.swagger.annotations.Api;
@@ -10,6 +11,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,12 +34,18 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "successful operation")
     })
     @PostMapping(produces = "application/json")
-    public void save(@Valid @RequestBody @ApiParam(value = "Created user object") User user) {
-       if (userRepository.getUserByUsername(user.getUsername()).isPresent()) {
+    public void save(@Valid @RequestBody @ApiParam(value = "Created user object") User user, BindingResult bindingResult) throws ValidationException {
+        if (bindingResult.hasErrors()) {
+            if (bindingResult.hasErrors()) {
+                throw new ValidationException("parameters not valid");
+            }
+        }
+
+        if (userRepository.getUserByUsername(user.getUsername()).isPresent()) {
             throw new UserIsExitsException("user is exits");
-       } else {
-           userRepository.save(user);
-       }
+        } else {
+            userRepository.save(user);
+        }
     }
 
     @ApiOperation(value = "Get user by user name")
@@ -48,9 +56,10 @@ public class UserController {
     })
     @GetMapping(value = "/{username}", produces = "application/json")
     public ResponseEntity<User> getUserByUsername(@PathVariable("username")
-                                                  @ApiParam(value = "The name that needs to be fetched. Use user1 for testing.", example = "username") String username) {
-        if (username == null | userRepository.getUserByUsername(username).isEmpty()) {
-            return ResponseEntity.badRequest().build();
+                                                  @ApiParam(value = "The name that needs to be fetched. Use user1 for testing.", example = "username") String username) throws ValidationException {
+        if (userRepository.getUserByUsername(username).isEmpty()) {
+//            return ResponseEntity.badRequest().build();
+            throw new ValidationException("parameters not valid");
         }
 
         Optional<User> userByUsername = userRepository.getUserByUsername(username);
@@ -64,10 +73,10 @@ public class UserController {
     })
     @PutMapping(value = "/{username}", produces = "application/json")
     public void updateUserByUsername(@PathVariable("username")
-                                                     @ApiParam(value = "name that need to be updated", example = "username") String username,
-                                                     @ApiParam(value = "Updated user object") @RequestBody User user) {
+                                     @ApiParam(value = "name that need to be updated", example = "username") String username,
+                                     @ApiParam(value = "Updated user object") @RequestBody User user) throws ValidationException {
         if (username == null | userRepository.getUserByUsername(username).isEmpty()) {
-
+            throw new ValidationException("parameters not valid");
         }
         Optional<User> userByUsername = userRepository.getUserByUsername(username);
         User updateUser = new User();
@@ -82,9 +91,10 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @DeleteMapping(value = "/{username}", produces = "application/json")
-    public void deleteUserByUsername(@PathVariable("username") @ApiParam(value = "The name that needs to be deleted", example = "username") String username) {
+    public void deleteUserByUsername(@PathVariable("username")
+                                     @ApiParam(value = "The name that needs to be deleted", example = "username") String username) throws ValidationException {
         if (username == null | userRepository.getUserByUsername(username).isEmpty()) {
-
+            throw new ValidationException("parameters not valid");
         }
 
         Optional<User> userByUsername = userRepository.getUserByUsername(username);
