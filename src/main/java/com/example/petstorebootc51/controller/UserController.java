@@ -58,7 +58,6 @@ public class UserController {
     public ResponseEntity<User> getUserByUsername(@PathVariable("username")
                                                   @ApiParam(value = "The name that needs to be fetched. Use user1 for testing.", example = "username") String username) throws ValidationException {
         if (userRepository.getUserByUsername(username).isEmpty()) {
-//            return ResponseEntity.badRequest().build();
             throw new ValidationException("parameters not valid");
         }
 

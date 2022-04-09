@@ -40,8 +40,7 @@ public class StoreController {
             @ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
             @ApiResponse(responseCode = "404", description = "Order not found")
     })
-//    @GetMapping(value = "/order/{orderId}", produces = "application/json")
-    @GetMapping("/order/{orderId}")
+    @GetMapping(value = "/order/{orderId}", produces = "application/json")
     public ResponseEntity<Order> getOrder(@PathVariable("orderId")
                                           @ApiParam(value = "ID of pet that needs to be fetched", example = "orderId") Long orderId,
                                           BindingResult bindingResult) {
@@ -55,8 +54,7 @@ public class StoreController {
             @ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
             @ApiResponse(responseCode = "404", description = "Order not found")
     })
-//    @DeleteMapping(value = "/order/{orderId}", produces = "application/json")
-    @DeleteMapping("/order/{orderId}")
+    @DeleteMapping(value = "/order/{orderId}", produces = "application/json")
     public void deleteOrder(@PathVariable("orderId")
                             @ApiParam(value = "ID of the order that needs to be deleted", example = "orderId") Long orderId,
                             BindingResult bindingResult) {
@@ -68,7 +66,7 @@ public class StoreController {
             @ApiResponse(responseCode = "200", description = "successful operation")
     })
     @GetMapping(value = "/inventory", produces = "application/json")
-    public ResponseEntity<Object> getListInventory() {
+    public ResponseEntity<?> getListInventory() {
         return ResponseEntity.ok(new Object());
     }
 }
